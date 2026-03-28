@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Love</title>
+    <style>
+        body {
+            background-color: #000;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #ff4d6d;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        #content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+        }
+
+        #display-text {
+            font-size: 3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            display: none;
+            padding: 0 20px;
+            text-shadow: 0 0 15px rgba(255, 77, 109, 0.7);
+        }
+
+        #heart-container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .photo {
+            width: 65px;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 10px;
+            position: absolute;
+            border: 2px solid #fff;
+            opacity: 0;
+            transition: all 0.8s ease-in-out;
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.5);
+        }
+
+        #start-btn {
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border: 2px solid #ff4d6d;
+            padding: 15px 30px;
+            border-radius: 30px;
+            background: rgba(255, 77, 109, 0.2);
+            transition: 0.3s;
+        }
+
+        #start-btn:hover {
+            background: #ff4d6d;
+            box-shadow: 0 0 20px #ff4d6d;
+        }
+
+        #final-msg {
+            color: white;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            opacity: 0;
+            transition: 2s;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div id="content">
+    <div id="start-btn" onclick="startSurprise()">SURPRISE ကို ကြည့်ရန် နှိပ်ပါ</div>
+    <div id="display-text"></div>
+    <div id="heart-container"></div>
+    <div id="final-msg">Happy Birthday to the girl I love so much 💖</div>
+</div>
+
+<audio id="bgMusic" preload="auto">
+    <source src="https://www.dropbox.com/scl/fi/e611n4w1v5hdt766856la/gemini_music.mp3?rlkey=lxdiq5h9hnoa76w7kzhxjj0mh&st=t5e1orud&raw=1" type="audio/mpeg">
+</audio>
+
+<script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    const heartContainer = document.getElementById('heart-container');
+    const displayText = document.getElementById('display-text');
+    const finalMsg = document.getElementById('final-msg');
+    const music = document.getElementById('bgMusic');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const letters = "0123456789HBDLOVE";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#ff4d6d";
+        ctx.font = fontSize + "px arial";
+
+        drops.forEach((y, i) => {
+            const text = letters[Math.floor(Math.random() * letters.length)];
+            ctx.fillText(text, i * fontSize, y * fontSize);
+            if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        });
+    }
+
+    let matrixInterval;
+
+    function startSurprise() {
+        document.getElementById('start-btn').style.display = "none";
+        
+        // သီချင်းစဖွင့်ခြင်း
+        music.play().catch(error => console.log("Audio play failed:", error));
+        
+        matrixInterval = setInterval(drawMatrix, 33);
+
+        const sequence = ["3", "2", "1", "HAPPY", "BIRTHDAY", "TO THE", "GIRL", "I LOVE", "SO MUCH", "❤️"];
+        let i = 0;
+
+        displayText.style.display = "block";
+
+        const showText = () => {
+            if (i < sequence.length) {
+                displayText.innerText = sequence[i];
+                i++;
+                setTimeout(showText, 800);
+            } else {
+                displayText.style.display = "none";
+                showHeart();
+            }
+        };
+        showText();
+    }
+
+    function showHeart() {
+        heartContainer.style.display = "block";
+        
+        // ပုံ ၁၈ ပုံစာရင်း
+        const photos = [
+            "https://i.ibb.co/dsLt6yHd/image.png", "https://i.ibb.co/99hF7tr7/image.png",
+            "https://i.ibb.co/j90L7SLZ/image.png", "https://i.ibb.co/fbDWJb7/image.png",
+            "https://i.ibb.co/PZW2BnBQ/image.png", "https://i.ibb.co/dw7mn732/image.png",
+            "https://i.ibb.co/TDNdDWfy/image.png", "https://i.ibb.co/DPqkYq9c/image.png",
+            "https://i.ibb.co/dsLt6yHd/image.png", "https://i.ibb.co/99hF7tr7/image.png",
+            "https://i.ibb.co/j90L7SLZ/image.png", "https://i.ibb.co/fbDWJb7/image.png",
+            "https://i.ibb.co/PZW2BnBQ/image.png", "https://i.ibb.co/dw7mn732/image.png",
+            "https://i.ibb.co/TDNdDWfy/image.png", "https://i.ibb.co/DPqkYq9c/image.png",
+            "https://i.ibb.co/dsLt6yHd/image.png", "https://i.ibb.co/99hF7tr7/image.png"
+        ];
+
+        const n = photos.length;
+        photos.forEach((src, index) => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = 'photo';
+            
+            const t = (index / n) * 2 * Math.PI;
+            const x = 180 * Math.pow(Math.sin(t), 3);
+            const y = -(150 * Math.cos(t) - 60 * Math.cos(2 * t) - 25 * Math.cos(3 * t) - 10 * Math.cos(4 * t));
+            
+            img.style.left = (250 + x - 32.5) + "px";
+            img.style.top = (220 + y - 32.5) + "px";
+            
+            heartContainer.appendChild(img);
+            
+            setTimeout(() => {
+                img.style.opacity = "1";
+                img.style.transform = "scale(1.1)";
+            }, index * 150);
+        });
+
+        setTimeout(() => {
+            finalMsg.style.opacity = "1";
+        }, 3500);
+    }
+</script>
+
+</body>
+</html>
